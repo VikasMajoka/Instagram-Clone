@@ -1,20 +1,17 @@
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 const PORT = 5000
+const {MONGOURI}= require('./keys')
 
-const customMiddleware = (req ,res ,next)=>{
-    console.log("middleware executed!!")
-    next()
-}
-
-app.use(customMiddleware)
-
-
-app.get('/',(req,res)=>{
-    console.log("home")
-    res.send("hello world")
+mongoose.connect(MONGOURI)
+mongoose.connection.on('connected',()=>{
+    console.log("connected to mongo yeah")
 })
 
+mongoose.connection.on('error',(err)=>{
+    console.log("err connecting" ,err)
+})
 app.listen(PORT,()=>{
     console.log("server is running on",PORT)
 })
